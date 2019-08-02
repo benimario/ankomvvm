@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import net.codephobia.ankomvvm.R
 import org.jetbrains.anko.inputMethodManager
+import org.jetbrains.anko.windowManager
 
 /**
  * Created by benimario on 2018. 11. 30..
