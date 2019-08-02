@@ -1,6 +1,7 @@
 package net.codephobia.ankomvvm.components
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,8 +23,13 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), AnkoLogger {
         super.onCreate(savedInstanceState)
         getViewModel().let {
             it.uiContextEvent.observe(this, Observer { event ->
-                when(event) {
+                when(event.first) {
                     BaseViewModel.MESSAGE_HIDE_KEYBOARD -> hideKeyboard()
+                    BaseViewModel.MESSAGE_FINISH_ACTIVITY -> activity?.finish()
+                    BaseViewModel.MESSAGE_START_ACTIVITY_FOR_RESULT -> event.second?.let { map ->
+                        map as Map<*, *>
+                        startActivityForResult(map["intent"] as Intent, map["requestCode"] as Int)
+                    }
                     else -> {}
                 }
             })
