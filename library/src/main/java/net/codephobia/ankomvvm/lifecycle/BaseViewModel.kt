@@ -21,9 +21,9 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
 
     val uiContextEvent = MutableLiveData<Pair<Int, Any?>>(-1 to null)
 
-    fun showToast(message: String) = getApplication<Application>().toast(message)
+    fun toast(message: String) = getApplication<Application>().toast(message)
 
-    fun showToast(messageRes: Int) = getApplication<Application>().toast(messageRes)
+    fun toast(messageRes: Int) = getApplication<Application>().toast(messageRes)
 
     fun getContent(uri: Uri?): File? = uri?.let {
         app.contentResolver.openInputStream(uri)?.use { input ->
