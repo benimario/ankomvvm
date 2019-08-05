@@ -44,8 +44,9 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
         uiContextEvent.value = MESSAGE_FINISH_ACTIVITY to null
     }
 
-    inline fun <reified T: Activity> startActivity(intent: Intent = Intent(app, T::class.java))
-        = app.startActivity(intent)
+    inline fun <reified T: Activity> startActivity(intent: Intent = Intent(app, T::class.java)) {
+        uiContextEvent.value = MESSAGE_START_ACTIVITY to intent
+    }
 
     inline fun <reified T: Activity> startActivityAndFinish(intent: Intent = Intent(app, T::class.java)) {
         startActivity<T>(intent)
@@ -69,6 +70,7 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
         val MESSAGE_HIDE_KEYBOARD = 0
         val MESSAGE_FINISH_ACTIVITY = 1
         val MESSAGE_START_ACTIVITY_FOR_RESULT = 2
+        val MESSAGE_START_ACTIVITY = 3
     }
 
 }

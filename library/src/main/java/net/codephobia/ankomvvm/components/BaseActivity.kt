@@ -30,6 +30,10 @@ abstract class BaseActivity<V : BaseViewModel> : AppCompatActivity(), AnkoLogger
                         map as Map<*, *>
                         startActivityForResult(map["intent"] as Intent, map["requestCode"] as Int)
                     }
+                    BaseViewModel.MESSAGE_START_ACTIVITY -> event.second?.let { map ->
+                        map as Map<*, *>
+                        startActivity(map["intent"] as Intent)
+                    }
                     else -> {}
                 }
             })
