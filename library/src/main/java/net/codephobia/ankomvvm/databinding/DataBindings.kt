@@ -2,8 +2,10 @@ package net.codephobia.ankomvvm.databinding
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.*
-import androidx.databinding.ObservableList
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Switch
+import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -92,26 +94,16 @@ fun Switch.bindChecked(lifecycleOwner: LifecycleOwner,
     }
 }
 
-fun <T: RecyclerView.ViewHolder, F> RecyclerView.Adapter<T>.bindItem(lifecycleOwner: LifecycleOwner, dataset: ObservableList<F>?) {
-    dataset?.addOnListChangedCallback(object: ObservableList.OnListChangedCallback<ObservableList<F>>() {
-        override fun onChanged(sender: ObservableList<F>?) {
-            this@bindItem.notifyDataSetChanged()
-        }
+fun <T> MutableLiveData<MutableList<T>>.add(item: T) {
+    this.value?.add(item)
+    this.value = this.value
+}
 
-        override fun onItemRangeRemoved(sender: ObservableList<F>?, positionStart: Int, itemCount: Int) {
-            this@bindItem.notifyDataSetChanged()
-        }
-
-        override fun onItemRangeMoved(sender: ObservableList<F>?, fromPosition: Int, toPosition: Int, itemCount: Int) {
-            this@bindItem.notifyDataSetChanged()
-        }
-
-        override fun onItemRangeInserted(sender: ObservableList<F>?, positionStart: Int, itemCount: Int) {
-            this@bindItem.notifyDataSetChanged()
-        }
-
-        override fun onItemRangeChanged(sender: ObservableList<F>?, positionStart: Int, itemCount: Int) {
-            this@bindItem.notifyDataSetChanged()
-        }
+fun <T: RecyclerView.ViewHolder, F> RecyclerView.Adapter<T>.bindItem(
+    lifecycleOwner: LifecycleOwner,
+    dataset: MutableLiveData<List<F>>?
+) {
+    dataset?.observe(lifecycleOwner, Observer {
+        notifyDataSetChanged()
     })
 }
