@@ -1,5 +1,6 @@
 package net.codephobia.ankomvvm.lifecycle
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
@@ -58,6 +59,7 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
                 mapOf("intent" to intent, "requestCode" to requestCode)
     }
 
+    @SuppressLint("MissingPermission")
     @Throws(SecurityException::class)
     fun requestLocationUpdates(provider: String, minTime: Long, minDistance: Float,
                                         listener: LocationListener
@@ -67,10 +69,10 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
 
 
     companion object {
-        val MESSAGE_HIDE_KEYBOARD = 0
-        val MESSAGE_FINISH_ACTIVITY = 1
-        val MESSAGE_START_ACTIVITY = 2
-        val MESSAGE_START_ACTIVITY_FOR_RESULT = 3
+        const val MESSAGE_HIDE_KEYBOARD = 0
+        const val MESSAGE_FINISH_ACTIVITY = 1
+        const val MESSAGE_START_ACTIVITY = 2
+        const val MESSAGE_START_ACTIVITY_FOR_RESULT = 3
     }
 
 }
