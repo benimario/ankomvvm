@@ -30,6 +30,10 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), AnkoLogger {
                         map as Map<*, *>
                         startActivityForResult(map["intent"] as Intent, map["requestCode"] as Int)
                     }
+                    BaseViewModel.MESSAGE_START_ACTIVITY -> event.second?.let { intent ->
+                        intent as Intent
+                        startActivity(intent)
+                    }
                     else -> {}
                 }
             })
