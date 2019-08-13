@@ -43,4 +43,9 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), AnkoLogger {
     protected fun getViewModel(): V =
         ViewModelProviders.of(this).get(viewModelType.java)
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        getViewModel().onActivityResult(requestCode, resultCode, data)
+    }
+
 }

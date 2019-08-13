@@ -43,5 +43,9 @@ abstract class BaseActivity<V : BaseViewModel> : AppCompatActivity(), AnkoLogger
     protected fun getViewModel(): V =
         ViewModelProviders.of(this).get(viewModelType.java)
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        getViewModel().onActivityResult(requestCode, resultCode, data)
+    }
 
 }
