@@ -2,10 +2,7 @@ package net.codephobia.ankomvvm.databinding
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Switch
-import android.widget.TextView
+import android.widget.*
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -15,9 +12,11 @@ import org.jetbrains.anko.sdk27.coroutines.onCheckedChange
 /**
  * Created by benimario on 15/03/2019.
  */
-fun EditText.bindString(lifecycleOwner: LifecycleOwner,
-                        string: MutableLiveData<String>?,
-                        onTextChanged: ((editText: EditText) -> Unit)? = null) = string?.let {
+fun EditText.bindString(
+    lifecycleOwner: LifecycleOwner,
+    string: MutableLiveData<String>?,
+    onTextChanged: ((editText: EditText) -> Unit)? = null
+) = string?.let {
     addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
         }
@@ -44,8 +43,10 @@ fun EditText.bindString(lifecycleOwner: LifecycleOwner,
     setText(string.value)
 }
 
-fun TextView.bindString(lifecycleOwner: LifecycleOwner,
-                        string: MutableLiveData<Any>?) = string?.let {
+fun TextView.bindString(
+    lifecycleOwner: LifecycleOwner,
+    string: MutableLiveData<Any>?
+) = string?.let {
     string.observe(lifecycleOwner, Observer { str ->
         if (str != text.toString()) {
             text = str.toString()
@@ -68,18 +69,22 @@ fun EditText.onChange(onTextChanged: (editText: EditText) -> Unit) =
         }
     })
 
-fun Button.bindEnabled(lifecycleOwner: LifecycleOwner,
-                       boolean: MutableLiveData<Boolean>?,
-                       onStatusChange: ((Button, Boolean) -> Unit)? = null) = boolean?.let {
+fun Button.bindEnabled(
+    lifecycleOwner: LifecycleOwner,
+    boolean: MutableLiveData<Boolean>?,
+    onStatusChange: ((Button, Boolean) -> Unit)? = null
+) = boolean?.let {
     boolean.observe(lifecycleOwner, Observer { enabled ->
         isEnabled = enabled
         onStatusChange?.invoke(this, enabled)
     })
 }
 
-fun Switch.bindChecked(lifecycleOwner: LifecycleOwner,
-                       boolean: MutableLiveData<Boolean>?,
-                       onStatusChange: ((Switch, Boolean) -> Unit)? = null) = boolean?.let {
+fun Switch.bindChecked(
+    lifecycleOwner: LifecycleOwner,
+    boolean: MutableLiveData<Boolean>?,
+    onStatusChange: ((Switch, Boolean) -> Unit)? = null
+) = boolean?.let {
     boolean.observe(lifecycleOwner, Observer { checked ->
         if (isChecked != checked) {
             isChecked = checked
@@ -94,12 +99,22 @@ fun Switch.bindChecked(lifecycleOwner: LifecycleOwner,
     }
 }
 
+fun ImageView.bindUrl(
+    lifecycleOwner: LifecycleOwner,
+    url: MutableLiveData<String>,
+    onUrlChange: ((String) -> Unit)? = null
+) {
+    url.observe(lifecycleOwner, Observer {
+        onUrlChange?.invoke(it)
+    })
+}
+
 fun <T> MutableLiveData<MutableList<T>>.add(item: T) {
     this.value?.add(item)
     this.value = this.value
 }
 
-fun <T: RecyclerView.ViewHolder, F> RecyclerView.Adapter<T>.bindItem(
+fun <T : RecyclerView.ViewHolder, F> RecyclerView.Adapter<T>.bindItem(
     lifecycleOwner: LifecycleOwner,
     dataset: MutableLiveData<List<F>>?
 ) {
