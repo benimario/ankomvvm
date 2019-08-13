@@ -59,7 +59,7 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
             mapOf("intent" to intent, "requestCode" to requestCode)
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    open fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     }
 
     @SuppressLint("MissingPermission")
