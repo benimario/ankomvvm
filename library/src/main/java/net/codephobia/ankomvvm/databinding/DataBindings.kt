@@ -2,6 +2,7 @@ package net.codephobia.ankomvvm.databinding
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.*
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +13,14 @@ import org.jetbrains.anko.sdk27.coroutines.onCheckedChange
 /**
  * Created by benimario on 15/03/2019.
  */
+
+fun View.bindVisibility(
+    lifecycleOwner: LifecycleOwner,
+    visibility: MutableLiveData<Boolean>?
+) = visibility?.observe(lifecycleOwner, Observer {
+    this.visibility = if (it) View.VISIBLE else View.GONE
+})
+
 fun EditText.bindString(
     lifecycleOwner: LifecycleOwner,
     string: MutableLiveData<String>?,
@@ -56,19 +65,6 @@ fun TextView.bindString(
     text = string.value.toString()
 }
 
-fun EditText.onChange(onTextChanged: (editText: EditText) -> Unit) =
-    addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-        }
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            onTextChanged(this@onChange)
-        }
-    })
-
 fun Button.bindEnabled(
     lifecycleOwner: LifecycleOwner,
     boolean: MutableLiveData<Boolean>?,
@@ -101,11 +97,11 @@ fun Switch.bindChecked(
 
 fun ImageView.bindUrl(
     lifecycleOwner: LifecycleOwner,
-    url: MutableLiveData<String>,
+    url: MutableLiveData<String?>,
     onUrlChange: ((String) -> Unit)? = null
 ) {
     url.observe(lifecycleOwner, Observer {
-        onUrlChange?.invoke(it)
+        it?.let { onUrlChange?.invoke(it) }
     })
 }
 
