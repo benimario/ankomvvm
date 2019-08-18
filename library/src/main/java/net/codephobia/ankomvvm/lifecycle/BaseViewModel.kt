@@ -45,25 +45,15 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
         uiContextEvent.value = MESSAGE_FINISH_ACTIVITY to null
     }
 
-    fun startActivity(intent: Intent) {
-        uiContextEvent.value = MESSAGE_START_ACTIVITY to intent
-    }
-
-    fun startActivityAndFinish(intent: Intent) {
-        startActivity(intent)
-        uiContextEvent.value = MESSAGE_FINISH_ACTIVITY to null
-    }
-
-
-    inline fun <reified T : Activity> startActivity(intentFlags: Int = 0) {
+    inline fun <reified T : Activity> startActivity(intentProperties: (Intent.() -> Unit) = {}) {
         uiContextEvent.value = MESSAGE_START_ACTIVITY to
             Intent(app, T::class.java).apply {
-                flags = intentFlags
+                intentProperties()
             }
     }
 
-    inline fun <reified T : Activity> startActivityAndFinish(intentFlags: Int = 0) {
-        startActivity<T>(intentFlags)
+    inline fun <reified T : Activity> startActivityAndFinish(intentProperties: (Intent.() -> Unit) = {}) {
+        startActivity<T>(intentProperties)
         uiContextEvent.value = MESSAGE_FINISH_ACTIVITY to null
     }
 
