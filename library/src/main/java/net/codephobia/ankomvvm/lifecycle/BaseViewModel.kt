@@ -45,12 +45,25 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
         uiContextEvent.value = MESSAGE_FINISH_ACTIVITY to null
     }
 
-    inline fun <reified T: Activity> startActivity(intent: Intent = Intent(app, T::class.java)) {
+    fun startActivity(intent: Intent) {
         uiContextEvent.value = MESSAGE_START_ACTIVITY to intent
     }
 
-    inline fun <reified T: Activity> startActivityAndFinish(intent: Intent = Intent(app, T::class.java)) {
-        startActivity<T>(intent)
+    fun startActivityAndFinish(intent: Intent) {
+        startActivity(intent)
+        uiContextEvent.value = MESSAGE_FINISH_ACTIVITY to null
+    }
+
+
+    inline fun <reified T : Activity> startActivity(intentFlags: Int = 0) {
+        uiContextEvent.value = MESSAGE_START_ACTIVITY to
+            Intent(app, T::class.java).apply {
+                flags = intentFlags
+            }
+    }
+
+    inline fun <reified T : Activity> startActivityAndFinish(intentFlags: Int = 0) {
+        startActivity<T>(intentFlags)
         uiContextEvent.value = MESSAGE_FINISH_ACTIVITY to null
     }
 
@@ -64,8 +77,9 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
 
     @SuppressLint("MissingPermission")
     @Throws(SecurityException::class)
-    fun requestLocationUpdates(provider: String, minTime: Long, minDistance: Float,
-                                        listener: LocationListener
+    fun requestLocationUpdates(
+        provider: String, minTime: Long, minDistance: Float,
+        listener: LocationListener
     ) {
         app.locationManager.requestLocationUpdates(provider, minTime, minDistance, listener)
     }

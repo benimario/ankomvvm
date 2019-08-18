@@ -98,7 +98,7 @@ fun Switch.bindChecked(
 fun ImageView.bindUrl(
     lifecycleOwner: LifecycleOwner,
     url: MutableLiveData<String?>,
-    onUrlChange: ((String) -> Unit)? = null
+    onUrlChange: ((String?) -> Unit)? = null
 ) {
     url.observe(lifecycleOwner, Observer {
         it?.let { onUrlChange?.invoke(it) }
