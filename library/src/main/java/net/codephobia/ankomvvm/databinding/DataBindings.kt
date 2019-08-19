@@ -54,7 +54,7 @@ fun EditText.bindString(
 
 fun TextView.bindString(
     lifecycleOwner: LifecycleOwner,
-    string: MutableLiveData<Any>?
+    string: MutableLiveData<String>?
 ) = string?.let {
     string.observe(lifecycleOwner, Observer { str ->
         if (str != text.toString()) {
