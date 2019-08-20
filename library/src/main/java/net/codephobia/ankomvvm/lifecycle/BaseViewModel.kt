@@ -24,8 +24,9 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
 
     fun toast(messageRes: Int) = app.toast(messageRes)
 
-    fun confirm(message: String, confirm: () -> Unit) = app.alert(message) {
-        yesButton { confirm() }
+    fun confirm(message: String, confirm: () -> Unit) {
+        uiContextEvent.value = MESSAGE_CONFIRM_DIALOG to
+            mapOf("message" to message, "callback" to confirm)
     }
 
     fun getContentImage(uri: Uri?): File? = uri?.let {
@@ -82,6 +83,7 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
         const val MESSAGE_FINISH_ACTIVITY = 1
         const val MESSAGE_START_ACTIVITY = 2
         const val MESSAGE_START_ACTIVITY_FOR_RESULT = 3
+        const val MESSAGE_CONFIRM_DIALOG = 4
     }
 
 }
