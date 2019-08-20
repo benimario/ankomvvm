@@ -1,5 +1,6 @@
 package net.codephobia.ankomvvm.databinding
 
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -116,5 +117,18 @@ fun <T : RecyclerView.ViewHolder, F> RecyclerView.Adapter<T>.bindItem(
 ) {
     dataset?.observe(lifecycleOwner, Observer {
         notifyDataSetChanged()
+    })
+}
+
+fun <T> Spinner.bindStringEntries(
+    lifecycleOwner: LifecycleOwner,
+    items: MutableLiveData<List<T>>
+) {
+    items.observe(lifecycleOwner, Observer {
+        adapter = ArrayAdapter(
+            lifecycleOwner as Context,
+            android.R.layout.simple_spinner_item,
+            items.value ?: listOf()
+        )
     })
 }

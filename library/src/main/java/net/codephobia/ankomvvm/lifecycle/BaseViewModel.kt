@@ -8,9 +8,7 @@ import android.location.LocationListener
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.locationManager
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
 import java.io.File
 
 /**
@@ -22,11 +20,15 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
 
     val uiContextEvent = MutableLiveData<Pair<Int, Any?>>(-1 to null)
 
-    fun toast(message: String) = getApplication<Application>().toast(message)
+    fun toast(message: String) = app.toast(message)
 
-    fun toast(messageRes: Int) = getApplication<Application>().toast(messageRes)
+    fun toast(messageRes: Int) = app.toast(messageRes)
 
-    fun getContent(uri: Uri?): File? = uri?.let {
+    fun confirm(message: String, confirm: () -> Unit) = app.alert(message) {
+        yesButton { confirm() }
+    }
+
+    fun getContentImage(uri: Uri?): File? = uri?.let {
         app.contentResolver.openInputStream(uri)?.use { input ->
             val file = File.createTempFile("IMG_${System.currentTimeMillis()}", ".jpg", app.cacheDir)
             file.outputStream().use { output ->
