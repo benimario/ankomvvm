@@ -9,6 +9,9 @@ import androidx.lifecycle.ViewModelProviders
 import net.codephobia.ankomvvm.extensions.hideKeyboard
 import net.codephobia.ankomvvm.lifecycle.BaseViewModel
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.yesButton
 import kotlin.reflect.KClass
 
 /**
@@ -33,6 +36,12 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), AnkoLogger {
                     BaseViewModel.MESSAGE_START_ACTIVITY -> event.second?.let { intent ->
                         intent as Intent
                         startActivity(intent)
+                    }
+                    BaseViewModel.MESSAGE_CONFIRM_DIALOG -> event.second?.let { map ->
+                        map as Map<*, *>
+                        alert(map["message"] as String) {
+                            yesButton { (map["callback"] as () -> Unit)() }
+                        }
                     }
                     else -> {}
                 }
