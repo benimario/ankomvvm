@@ -40,7 +40,7 @@ abstract class BaseActivity<V : BaseViewModel> : AppCompatActivity(), AnkoLogger
                         map as Map<*, *>
                         alert(map["message"] as String) {
                             yesButton { (map["callback"] as () -> Unit)() }
-                        }
+                        }.show()
                     }
                     else -> {}
                 }
