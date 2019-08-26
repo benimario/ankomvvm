@@ -3,9 +3,11 @@ package net.codephobia.ankomvvm.lifecycle
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
+import android.content.ContentResolver
 import android.content.Intent
 import android.location.LocationListener
 import android.net.Uri
+import android.webkit.MimeTypeMap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import org.jetbrains.anko.*
@@ -29,9 +31,14 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
             mapOf("message" to message, "callback" to confirm)
     }
 
-    fun getContentImage(uri: Uri?): File? = uri?.let {
+    fun getContent(uri: Uri?): File? = uri?.let {
         app.contentResolver.openInputStream(uri)?.use { input ->
-            val file = File.createTempFile("IMG_${System.currentTimeMillis()}", ".jpg", app.cacheDir)
+            val ext = if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
+                MimeTypeMap.getSingleton().getExtensionFromMimeType(app.contentResolver.getType(uri))
+            } else {
+                MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(uri.path)).toString())
+            }
+            val file = File.createTempFile("FILE_${System.currentTimeMillis()}", ".$ext", app.cacheDir)
             file.outputStream().use { output ->
                 input.copyTo(output)
                 return file

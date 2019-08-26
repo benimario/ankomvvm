@@ -11,7 +11,9 @@ class ExampleActivityUI(val viewModel: ExampleActivityViewModel) : AnkoComponent
     override fun createView(ui: AnkoContext<ExampleActivity>) = ui.linearLayout {
         textView("asdf")
         button("button") {
-            onClick { viewModel.hideKeyboard() }
+            onClick {
+                viewModel.finishActivity()
+            }
         }
     }
 
