@@ -8,6 +8,10 @@ import android.widget.*
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.jetbrains.anko.sdk27.coroutines.onCheckedChange
 
@@ -118,6 +122,19 @@ fun <T : RecyclerView.ViewHolder, F> RecyclerView.Adapter<T>.bindItem(
     dataset?.observe(lifecycleOwner, Observer {
         notifyDataSetChanged()
     })
+}
+
+fun <K, T> RecyclerView.bindPagedAdapter(
+    owner: LifecycleOwner,
+    adapter: PagedListAdapter<T, out RecyclerView.ViewHolder>,
+    pagedListConfig: PagedList.Config,
+    dataSourceFactory: DataSource.Factory<K, T>
+) {
+    this.adapter = adapter
+    LivePagedListBuilder<K, T>(dataSourceFactory, pagedListConfig)
+        .build().observe(owner, Observer {
+            adapter.submitList(it)
+        })
 }
 
 fun <T> Spinner.bindStringEntries(
