@@ -13,6 +13,7 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import org.jetbrains.anko.sdk27.coroutines.onCheckedChange
 
 /**
@@ -115,12 +116,15 @@ fun <T> MutableLiveData<MutableList<T>>.add(item: T) {
     this.value = this.value
 }
 
-fun <T : RecyclerView.ViewHolder, F> RecyclerView.Adapter<T>.bindItem(
-    lifecycleOwner: LifecycleOwner,
-    dataset: MutableLiveData<List<F>>?
+fun <T> RecyclerView.bindItem(
+    owner: LifecycleOwner,
+    data: MutableLiveData<MutableList<T>>,
+    callback: (MutableList<T>) -> Unit
 ) {
-    dataset?.observe(lifecycleOwner, Observer {
-        notifyDataSetChanged()
+    data.observe(owner, Observer { items ->
+        if(items.isNullOrEmpty().not()) {
+            callback(items)
+        }
     })
 }
 
@@ -148,4 +152,21 @@ fun <T> Spinner.bindStringEntries(
             items.value ?: listOf()
         )
     })
+}
+
+fun <T> ViewPager.bindItem(
+    owner: LifecycleOwner,
+    data: MutableLiveData<MutableList<T>>,
+    callback: (MutableList<T>) -> Unit
+) {
+    data.observe(owner, Observer { items ->
+        if(items.isNullOrEmpty().not()) {
+            callback(items)
+        }
+    })
+}
+
+fun <T> MutableLiveData<MutableList<T>>.addAll(item: List<T>) {
+    this.value?.addAll(item)
+    this.value = this.value
 }
