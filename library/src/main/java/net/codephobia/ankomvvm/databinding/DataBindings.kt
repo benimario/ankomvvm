@@ -3,9 +3,11 @@ package net.codephobia.ankomvvm.databinding
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.DataSource
@@ -128,17 +130,18 @@ fun <T> RecyclerView.bindItem(
     })
 }
 
-fun <K, T> RecyclerView.bindPagedAdapter(
+fun <T> RecyclerView.bindPagedList(
     owner: LifecycleOwner,
-    adapter: PagedListAdapter<T, out RecyclerView.ViewHolder>,
-    pagedListConfig: PagedList.Config,
-    dataSourceFactory: DataSource.Factory<K, T>
+    data: LiveData<PagedList<T>>
 ) {
-    this.adapter = adapter
-    LivePagedListBuilder<K, T>(dataSourceFactory, pagedListConfig)
-        .build().observe(owner, Observer {
-            adapter.submitList(it)
-        })
+    data.observe(owner, Observer {
+        try {
+            (adapter as PagedListAdapter<T, RecyclerView.ViewHolder>)
+                .submitList(it)
+        } catch (e: Exception) {
+            Log.e("AnkoMVVM", "bindPagedList() error", e)
+        }
+    })
 }
 
 fun <T> Spinner.bindStringEntries(
