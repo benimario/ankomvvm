@@ -29,6 +29,14 @@ fun View.bindVisibility(
     this.visibility = if (it) View.VISIBLE else View.GONE
 })
 
+fun <T> View.bindVisibility(
+    lifecycleOwner: LifecycleOwner,
+    data: LiveData<T>,
+    visibilityCallback: (T) -> Boolean
+) = data.observe(lifecycleOwner, Observer {
+    this.visibility = if (visibilityCallback(it)) View.VISIBLE else View.GONE
+})
+
 fun EditText.bindString(
     lifecycleOwner: LifecycleOwner,
     string: MutableLiveData<String>?,
