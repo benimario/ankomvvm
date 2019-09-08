@@ -23,7 +23,11 @@ abstract class BaseActivity<V : BaseViewModel> : AppCompatActivity(), AnkoLogger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getViewModel().let {
+        setUIContextEventObserver(getViewModel())
+    }
+
+    protected fun setUIContextEventObserver(viewModel: BaseViewModel) {
+        viewModel.let {
             it.uiContextEvent.observe(this, Observer { event ->
                 when(event.first) {
                     BaseViewModel.MESSAGE_HIDE_KEYBOARD -> hideKeyboard()
