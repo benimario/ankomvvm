@@ -38,8 +38,8 @@ abstract class BaseActivity<V : BaseViewModel> : AppCompatActivity(), AnkoLogger
                             val resultCode = map["resultCode"] as Int
                             setResult(resultCode, intent)
                             finish()
-                        } ?: finish()
-                    }
+                        }
+                    } ?: finish()
                     BaseViewModel.MESSAGE_START_ACTIVITY_FOR_RESULT -> event.second?.let { map ->
                         map as Map<*, *>
                         startActivityForResult(map["intent"] as Intent, map["requestCode"] as Int)
