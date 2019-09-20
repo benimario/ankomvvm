@@ -31,7 +31,15 @@ abstract class BaseActivity<V : BaseViewModel> : AppCompatActivity(), AnkoLogger
             it.uiContextEvent.observe(this, Observer { event ->
                 when(event.first) {
                     BaseViewModel.MESSAGE_HIDE_KEYBOARD -> hideKeyboard()
-                    BaseViewModel.MESSAGE_FINISH_ACTIVITY -> finish()
+                    BaseViewModel.MESSAGE_FINISH_ACTIVITY -> event.second?.let { map ->
+                        map as Map<*, *>
+                        val intent = map["intent"] as? Intent
+                        intent?.let {
+                            val resultCode = map["resultCode"] as Int
+                            setResult(resultCode, intent)
+                            finish()
+                        } ?: finish()
+                    }
                     BaseViewModel.MESSAGE_START_ACTIVITY_FOR_RESULT -> event.second?.let { map ->
                         map as Map<*, *>
                         startActivityForResult(map["intent"] as Intent, map["requestCode"] as Int)
