@@ -51,8 +51,12 @@ open class BaseViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
         uiContextEvent.value = MESSAGE_HIDE_KEYBOARD to null
     }
 
-    fun finishActivity() {
-        uiContextEvent.value = MESSAGE_FINISH_ACTIVITY to null
+    fun finishActivity(resultCode: Int? = null, resultCallback: (Intent.() -> Unit)? = null) {
+        uiContextEvent.value = MESSAGE_FINISH_ACTIVITY to
+            if (resultCallback == null) null
+            else mapOf("resultCode" to resultCode, "intent" to Intent().apply {
+                resultCallback()
+            })
     }
 
     inline fun <reified T : Activity> startActivity(intentProperties: (Intent.() -> Unit) = {}) {
