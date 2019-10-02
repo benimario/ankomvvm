@@ -34,9 +34,12 @@ abstract class BaseActivity<V : BaseViewModel> : AppCompatActivity(), AnkoLogger
                     BaseViewModel.MESSAGE_FINISH_ACTIVITY -> event.second?.let { map ->
                         map as Map<*, *>
                         val intent = map["intent"] as? Intent
+                        val resultCode = map["resultCode"] as Int
                         intent?.let {
-                            val resultCode = map["resultCode"] as Int
                             setResult(resultCode, intent)
+                            finish()
+                        } ?: run {
+                            setResult(resultCode)
                             finish()
                         }
                     } ?: finish()

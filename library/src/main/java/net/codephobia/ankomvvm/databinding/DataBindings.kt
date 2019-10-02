@@ -140,12 +140,13 @@ fun <T> RecyclerView.bindItem(
 
 fun <T> RecyclerView.bindPagedList(
     owner: LifecycleOwner,
+    adapter: PagedListAdapter<T, RecyclerView.ViewHolder>,
     data: LiveData<PagedList<T>>
 ) {
+    this.adapter = adapter
     data.observe(owner, Observer {
         try {
-            (adapter as PagedListAdapter<T, RecyclerView.ViewHolder>)
-                .submitList(it)
+            adapter.submitList(it)
         } catch (e: Exception) {
             Log.e("AnkoMVVM", "bindPagedList() error", e)
         }
