@@ -140,7 +140,7 @@ fun <T> RecyclerView.bindItem(
 
 fun <T> RecyclerView.bindPagedList(
     owner: LifecycleOwner,
-    adapter: PagedListAdapter<T, RecyclerView.ViewHolder>,
+    adapter: PagedListAdapter<T, out RecyclerView.ViewHolder>,
     data: LiveData<PagedList<T>>
 ) {
     this.adapter = adapter
